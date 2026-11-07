@@ -1,0 +1,1816 @@
+
+:root {
+  --mint: #E6F7F2;
+  --cream: #FFF4E2;
+  --white: #FFFFFF;
+  --orange: #FF6600;
+  --turquoise: #14B8A6;
+  --blue: #4682B4;
+  --text: #263238;
+  --muted: #607D76;
+  --border: #D5E4DF;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: var(--mint);
+  color: var(--text);
+}
+
+button {
+  font: inherit;
+}
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome-screen {
+  width: min(100%, 1050px);
+  min-height: 650px;
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  background: var(--white);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+  box-shadow: 0 12px 35px rgba(38, 50, 56, 0.07);
+}
+/* Окреме налаштування екрана з готовим персонажем */
+#characterScreen.welcome-screen {
+  grid-template-rows: auto auto;
+}
+
+.lyceum-name {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.owl-container {
+  position: relative;
+  min-height: 460px;
+  border-radius: 22px;
+  background: var(--cream);
+  overflow: hidden;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+/* Не розтягувати поле сови на екрані з готовим персонажем */
+#characterScreen .owl-container {
+  align-self: start;
+}
+/* Розташування елементів екрана з готовим персонажем */
+#characterScreen .email-hint-card {
+  grid-column: 1;
+  align-self: start;
+  margin-top: 0;
+}
+
+#characterScreen .character-actions {
+  grid-column: 2;
+  align-self: start;
+  margin-top: 0;
+}
+#characterScreen.welcome-screen {
+  column-gap: 10px;
+  row-gap: 8px;
+}
+#characterScreen .character-preview {
+  margin-top: 6px;
+}
+
+.owl-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 520px;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+.speech-bubble {
+  position: absolute;
+  top: 22px;
+  left: 7%;
+  width: 86%;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: var(--white);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: center;
+  box-shadow: 0 5px 18px rgba(38, 50, 56, 0.09);
+}
+
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 20px;
+  height: 20px;
+  background: var(--white);
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--turquoise);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1.12;
+}
+
+.subtitle {
+  max-width: 420px;
+  margin: 22px 0 12px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.primary-button {
+  border: none;
+  border-radius: 14px;
+  padding: 15px 34px;
+  background: var(--orange);
+  color: white;
+  font-weight: 700;
+  font-size: 17px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 5px 14px rgba(255, 102, 0, 0.2);
+}
+
+.primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(255, 102, 0, 0.28);
+}
+
+.primary-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 700px) {
+  .app {
+    padding: 12px;
+    align-items: flex-start;
+  }
+
+  .welcome-screen {
+    min-height: auto;
+    padding: 18px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 16px;
+  }
+
+  .lyceum-name {
+    font-size: 13px;
+  }
+
+  .owl-container {
+    min-height: 390px;
+    max-height: 55vh;
+  }
+
+  .intro {
+    padding: 12px 4px 18px;
+    align-items: center;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 36px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+  }
+
+  .primary-button {
+    width: 100%;
+  }
+}
+
+/* Керування відображенням екранів */
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: grid;
+}
+/* ЕКРАН 3. ПОЯСНЕННЯ КОНСТРУКТОРА */
+
+.explanation-screen {
+  width: min(100%, 900px);
+  min-height: 650px;
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  background: var(--white);
+  box-shadow: 0 12px 35px rgba(38, 50, 56, 0.07);
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.explanation-content {
+  width: min(100%, 720px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.explanation-content h1 {
+  font-size: clamp(30px, 4vw, 44px);
+}
+
+.rules-card,
+.note-card {
+  width: 100%;
+  padding: 22px 26px;
+  border-radius: 18px;
+  margin-top: 18px;
+}
+
+.rules-card {
+  background: var(--mint);
+}
+
+.rules-card h2 {
+  margin: 0 0 12px;
+  font-size: 21px;
+}
+
+.rules-card ul {
+  margin: 0;
+  padding-left: 22px;
+  line-height: 1.7;
+}
+
+.rules-card li + li {
+  margin-top: 8px;
+}
+
+.note-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--cream);
+}
+
+.note-card p {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.note-icon {
+  font-size: 24px;
+}
+
+.explanation-content .primary-button {
+  margin-top: 24px;
+}
+
+@media (max-width: 700px) {
+  .explanation-screen {
+    min-height: auto;
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .explanation-content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .rules-card,
+  .note-card {
+    padding: 18px;
+    text-align: left;
+  }
+
+  .rules-card ul {
+    padding-left: 20px;
+  }
+
+  .note-card {
+    gap: 10px;
+  }
+}
+.rules-card {
+  text-align: left;
+}
+
+.rules-card h2,
+.rules-card ul {
+  text-align: left;
+}
+
+.explanation-content .subtitle {
+  max-width: 600px;
+}
+/* КОНСТРУКТОР: ОСНОВНЕ ОФОРМЛЕННЯ */
+
+/* Екран 5 — готовий персонаж */
+.character-content {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.character-preview {
+  width: 100%;
+  max-width: 600px;
+  min-height:350px;
+  background: var(--mint);
+  border: 2px dashed var(--border);
+  border-radius: 20px;
+
+  position: relative;
+  overflow: hidden;
+  align-self: stretch;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.constructor-screen {
+  width: min(100%, 1200px);
+  min-height: 650px;
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  background: var(--white);
+  box-shadow: 0 12px 35px rgba(38, 50, 56, 0.07);
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.constructor-header {
+  text-align: center;
+}
+
+.constructor-header h1 {
+  font-size: clamp(30px, 4vw, 44px);
+}
+
+.constructor-header .subtitle {
+  max-width: 600px;
+  margin: 14px auto 0;
+}
+
+.constructor-layout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.tools-panel {
+  padding: 22px;
+  border-radius: 20px;
+  background: var(--cream);
+}
+
+.tools-panel h2 {
+  margin: 0 0 16px;
+  font-size: 19px;
+}
+
+.shape-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px 8px;
+  margin-bottom: 24px;
+}
+
+.shape-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.shape-button:hover,
+.shape-button.selected {
+  background: var(--white);
+  border-color: var(--turquoise);
+}
+
+.shape-icon {
+  display: block;
+  width: 42px;
+  height: 42px;
+  background: var(--turquoise);
+}
+
+.circle-icon {
+  border-radius: 50%;
+}
+
+.square-icon {
+  border-radius: 3px;
+}
+
+.rectangle-icon {
+  width: 52px;
+  height: 34px;
+  border-radius: 3px;
+}
+
+.triangle-icon {
+  width: 0;
+  height: 0;
+  background: transparent;
+  border-left: 24px solid transparent;
+  border-right: 24px solid transparent;
+  border-bottom: 42px solid var(--turquoise);
+}
+
+.zigzag-icon {
+  width: 52px;
+  height: 38px;
+  background: var(--turquoise);
+  clip-path: polygon(
+    0 20%,
+    25% 80%,
+    50% 20%,
+    75% 80%,
+    100% 20%,
+    100% 40%,
+    75% 100%,
+    50% 40%,
+    25% 100%,
+    0 40%
+  );
+}
+
+/* НАЛАШТУВАННЯ ВИБРАНОЇ ФІГУРИ */
+
+.selected-shape-panel {
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.selected-shape-panel[hidden] {
+  display: none;
+}
+
+.selected-shape-panel p {
+  margin: 14px 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+}
+
+.color-button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 2px solid #C8D5D1;
+  border-radius: 50%;
+  background-color: var(--color);
+  cursor: pointer;
+}
+
+.color-button[data-color="#FFFFFF"] {
+  border: 2px solid #AABBB5;
+}
+
+.color-button:hover {
+  outline: 2px solid var(--turquoise);
+  outline-offset: 2px;
+}
+
+.size-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.size-button,
+.editing-buttons button,
+#undoButton {
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--white);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+}
+.size-button.active {
+  background: var(--orange);
+  color: var(--white);
+  border-color: var(--orange);
+}
+#moveButton.active {
+  background: var(--orange);
+  color: var(--white);
+  border-color: var(--orange);
+}
+.size-button:hover,
+.editing-buttons button:hover,
+#undoButton:hover {
+  border-color: var(--turquoise);
+}
+
+.editing-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.editing-buttons button {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 5px;
+  font-size: 12px;
+}
+
+#undoButton {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 0;
+}
+/* Точне переміщення фігур */
+.nudge-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nudge-button {
+  width: 42px;
+  height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--text);
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.nudge-button:hover {
+  background: var(--mint);
+  border-color: var(--turquoise);
+}
+
+.nudge-button:active {
+  background: var(--turquoise);
+  color: white;
+}
+
+/* Кнопки повороту фігур */
+.rotation-button {
+  background: var(--white);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.rotation-button:hover {
+  background: var(--mint);
+  border-color: var(--turquoise);
+}
+
+.rotation-button:active {
+  background: var(--turquoise);
+  color: white;
+}
+
+#undoButton {
+  width: 100%;
+  margin-top: 16px;
+}
+
+#elementCounter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 18px 0 0;
+  padding: 9px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--cream);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* РОБОЧЕ ПОЛЕ */
+
+.workspace-container {
+  min-width: 0;
+}
+
+.workspace {
+  position: relative;
+  width: 100%;
+  min-height: 520px;
+  border: 2px dashed var(--border);
+  border-radius: 20px;
+  background: var(--mint);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workspace-hint {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  max-width: 300px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: var(--cream);
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+/* АДАПТАЦІЯ ДЛЯ ТЕЛЕФОНІВ */
+
+@media (max-width: 700px) {
+  .constructor-screen {
+    min-height: auto;
+    padding: 18px;
+  }
+
+  .constructor-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tools-panel {
+    padding: 18px;
+  }
+
+  .workspace {
+    min-height: 400px;
+  }
+
+  /* Екран 5: усі блоки розташовуються вертикально */
+  #characterScreen.welcome-screen {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    justify-items: center;
+  }
+
+  #characterScreen .owl-container {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    align-self: start;
+  }
+
+  #characterScreen .intro {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    text-align: center;
+  }
+
+  #characterScreen .email-hint-card {
+    grid-column: 1;
+    grid-row: 3;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #characterScreen .character-actions {
+    grid-column: 1;
+    grid-row: 4;
+    width: 100%;
+  }
+}
+/* ФІГУРИ НА РОБОЧОМУ ПОЛІ */
+
+.workspace-shape {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  transform: translate(-50%, -50%);
+  background: var(--turquoise);
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.workspace-shape.active {
+  border-color: transparent;
+  filter: none;
+}
+
+/* Обводка білих фігур */
+.workspace-shape[style*="rgb(255, 255, 255)"] {
+  border-color: transparent;
+  filter: drop-shadow(0 0 1px #82948F);
+}
+
+.selection-outline {
+  position: absolute;
+  z-index: 5;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.selection-outline path {
+  fill: none;
+  stroke: var(--orange);
+  stroke-width: 4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.shape-circle {
+  border-radius: 50%;
+}
+
+.shape-square {
+  border-radius: 3px;
+}
+
+.shape-rectangle {
+  width: 85px;
+  height: 55px;
+  border-radius: 3px;
+}
+
+.shape-triangle {
+  width: 60px;
+  height: 60px;
+  background: var(--turquoise);
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+}
+
+.shape-zigzag {
+  width: 65px;
+  height: 50px;
+  clip-path: polygon(
+    0 10%, 25% 55%, 50% 10%,
+    75% 55%, 100% 10%, 100% 45%,
+    75% 90%, 50% 45%, 25% 90%, 0 45%
+  );
+}
+/* Рамка групового виділення */
+.selection-box {
+  position: absolute;
+  border: 2px dashed var(--orange);
+  background: rgba(255, 102, 0, 0.10);
+  pointer-events: none;
+  z-index: 10;
+}
+/* Режим групового виділення */
+.workspace.group-selecting {
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* Фігури, що потрапили до групи */
+/* Пульсація фігур, виділених групою */
+.workspace-shape.group-selected {
+  outline: none;
+  animation: groupPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes groupPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+/* Кнопка групового виділення після вибору фігур */
+#groupSelectButton.has-selection {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+#groupSelectButton.active {
+  background: var(--orange);
+  color: var(--white);
+  border-color: var(--orange);
+}
+.highlight-word {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: rgba(255, 102, 0, 0.18);
+  color: #D95700;
+  font-weight: 700;
+}
+.highlight-limit {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background-color: rgba(20, 184, 166, 0.22);
+  color: inherit;
+  font-weight: 700;
+}
+/* Кнопка завершення конструктора */
+.finish-button {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  margin: 18px auto 0;
+  padding: 11px 16px;
+  font-size: 15px;
+  border-radius: 12px;
+  background: #FF6600;
+  color: white;
+  border: none;
+}
+
+.finish-button:disabled {
+  background: #E5E7EB;
+  color: #B0B7C3;
+  cursor: not-allowed;
+}
+
+.finish-button:not(:disabled):hover {
+  background: #E65C00;
+}
+/* Кнопки екрана результату першого етапу */
+.character-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+.character-actions button {
+  width: auto;
+  min-width: 190px;
+  padding: 13px 22px;
+  font-size: 15px;
+}
+
+#saveCharacterButton {
+  background: var(--white);
+  color: var(--turquoise);
+  border: 2px solid var(--turquoise);
+}
+
+#saveCharacterButton:hover {
+  background: var(--mint);
+}
+
+#readCharacteristicButton {
+  min-width: 230px;
+}
+#saveCharacteristicButton {
+  background: var(--white);
+  color: var(--turquoise);
+  border: 2px solid var(--turquoise);
+}
+
+#saveCharacteristicButton:hover {
+  background: var(--mint);
+}
+
+#continueToSecondStageButton {
+  min-width: 230px;
+}
+
+/* Компактне розташування елементів керування */
+.transform-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.rotation-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rotation-button {
+  width: 100%;
+  padding: 7px 4px;
+  font-size: 12px;
+}
+
+.nudge-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.nudge-button {
+  width: 100%;
+  height: 34px;
+}
+
+.editing-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.editing-buttons button,
+#undoButton {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 9px 5px;
+  font-size: 12px;
+}
+.editing-buttons #undoButton {
+  width: 100%;
+  margin-top: 0;
+  grid-column: auto;
+}
+.workspace-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+#elementCounter {
+  margin: 0;
+}
+
+.workspace-footer .finish-button {
+  width: auto;
+  margin: 0;
+  min-width: 220px;
+}
+/* Розташування фігури ліворуч від характеристики */
+.characteristic-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+  margin-bottom: 18px;
+}
+
+.characteristic-figure {
+  position: relative;
+  flex: 0 0 76px;
+  width: 76px;
+  height: 76px;
+  min-width: 76px;
+  min-height: 76px;
+  box-sizing: border-box;
+  background-color: var(--turquoise);
+  margin-top: 6px;
+}
+
+/* Кольорова характеристика */
+.color-characteristic-results {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.color-characteristic {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.color-characteristic-dot {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 50%;
+  border: 1px solid #D5E4DF;
+  box-sizing: border-box;
+  margin-top: 3px;
+}
+
+.color-characteristic-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.color-characteristic-text h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--turquoise);
+}
+
+.color-characteristic-text p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.color-characteristic-text > p:last-child {
+  margin-bottom: 0;
+}
+
+.characteristic-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.color-characteristic-level {
+  margin: 0 0 14px;
+  color: var(--secondary);
+  font-size: 12px;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+/* Розміри та форма фігур у характеристиці */
+.characteristic-figure.shape-square {
+  width: 64px;
+  height: 64px;
+  margin: 6px;
+}
+
+.characteristic-figure.shape-rectangle {
+  width: 76px;
+  height: 48px;
+  min-height: 48px;
+  flex: 0 0 76px;
+  margin: 14px 0;
+}
+
+.characteristic-figure.shape-circle {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  min-height: 64px;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 64px;
+  border-radius: 50%;
+  margin: 6px;
+}
+
+.characteristic-figure.shape-triangle {
+  width: 76px;
+  height: 68px;
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+  margin: 4px 0;
+}
+
+.characteristic-figure.shape-zigzag {
+  width: 65px;
+  height: 50px;
+  min-width: 65px;
+  flex-shrink: 0;
+  clip-path: polygon(
+    0 10%, 25% 55%, 50% 10%,
+    75% 55%, 100% 10%, 100% 45%,
+    75% 90%, 50% 45%, 25% 90%, 0 45%
+  );
+  margin: 13px 0;
+}
+/* Блок можливих професій */
+.characteristic-professions {
+  margin-top: 12px;
+  padding-top: 0;
+  border-top: none;
+}
+
+.characteristic-professions h4 {
+  margin: 0 0 6px;
+  color: var(--secondary);
+  font-size: 12px;
+  letter-spacing: 0.7px;
+}
+
+/* Мітки професій */
+.profession-tags {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0;
+  row-gap: 3px;
+  align-items: center;
+}
+
+.profession-tag {
+  display: inline;
+  padding: 0;
+  background: none;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.profession-tag:not(:last-child)::after {
+  content: "•";
+  display: inline-block;
+  margin: 0 8px;
+  color: var(--turquoise);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* Відступ між картками типажів */
+.characteristic-card {
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.characteristic-card:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.characteristic-subtitle {
+  display: block;
+  margin: 5px 0 8px;
+  padding: 0;
+  background: none;
+  color: var(--turquoise);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+/* Назва типажу */
+.characteristic-text h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  line-height: 1.25;
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Фраза-підзаголовок */
+.characteristic-subtitle {
+  display: block;
+  margin: 0 0 10px;
+  padding: 0;
+  background: none;
+  color: var(--turquoise);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* Опис */
+.characteristic-text > p:last-child {
+  margin-bottom: 0;
+}
+
+/* Професії під усім описом */
+.characteristic-professions {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+/* Компактна допоміжна примітка */
+.compact-note {
+  padding: 12px 16px;
+  gap: 10px;
+}
+
+.compact-note p {
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.compact-note .note-icon {
+  font-size: 18px;
+}
+.centered-button {
+  display: block;
+  margin: 12px auto 0;
+}
+/* Картка особливостей характеру */
+.color-characteristic-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  background-color: #F7FCFA;
+  border: 1px solid #D5E4DF;
+  border-radius: 18px;
+}
+
+.color-characteristic-card h2 {
+  margin: 0 0 2px;
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--text);
+}
+#characteristicScreen h1 {
+  color: #FF6600;
+}
+/* Вирівнювання робочих областей другого етапу */
+.interest-owl-panel {
+  padding: 0;
+}
+
+.interest-owl-container {
+  height: 580px;
+  min-height: 580px;
+  max-height: none;
+}
+
+.interest-workspace {
+  height: 550px;
+  min-height: 550px;
+}
+
+/* Кнопка завершення дослідження інтересів */
+.interest-test-footer .finish-button {
+  margin-top: 6px;
+}
+
+/* Компактніша хмаринка на екрані дослідження інтересів */
+#secondTestScreen .interest-owl-bubble {
+  padding: 12px 16px;
+}
+
+#secondTestScreen .interest-owl-bubble p {
+  margin: 0 0 10px;
+}
+
+/* Смужка прогресу */
+#secondTestScreen .interest-progress-track {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #D5E4DF;
+}
+
+#secondTestScreen .interest-progress-fill {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #14B8A6;
+  transition: width 0.4s ease;
+}
+/* Контейнер для кульок */
+#bubbleComparison {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 55px;
+  min-height: 340px;
+  padding: 35px 20px;
+}
+
+/* Повітряна кулька */
+.interest-bubble {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: clamp(190px, 30vw, 250px);
+  min-height: 240px;
+  padding: 35px 25px;
+
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffffff 5%, #b8eee5 55%, #14B8A6 100%);
+  box-shadow:
+    inset -12px -12px 22px rgba(0, 100, 90, 0.13),
+    0 8px 18px rgba(38, 50, 56, 0.13);
+
+  color: #263238;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+
+cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M5 3 L5 25 L11 19 L16 29 L21 27 L16 17 L25 17 Z' fill='%2314B8A6' stroke='%230D8F82' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 5 3, pointer;
+  animation: balloonFloat 3.5s ease-in-out infinite;
+  transition: box-shadow 0.25s ease;
+}
+
+/* Відблиск на кульці */
+.interest-bubble::before {
+  content: "";
+  position: absolute;
+  top: 16%;
+  left: 22%;
+  width: 18px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.65);
+  transform: rotate(25deg);
+  pointer-events: none;
+}
+
+/* Хвостик кульки */
+.interest-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -24px;
+  left: 50%;
+  width: 13px;
+  height: 25px;
+  background: #14B8A6;
+  clip-path: polygon(50% 0, 100% 35%, 50% 100%, 0 35%);
+  transform: translateX(-50%);
+}
+
+/* Легке похитування */
+@keyframes balloonFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(1deg);
+  }
+}
+
+/* Підсвічування при наведенні */
+.interest-bubble:hover {
+  box-shadow:
+    inset -12px -12px 22px rgba(0, 100, 90, 0.13),
+    0 12px 25px rgba(38, 50, 56, 0.2);
+}
+
+/* Дві постійні позиції для кульок */
+#bubbleComparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-items: center;
+  align-items: center;
+  gap: 35px;
+}
+
+/* Кульки займають свої колонки */
+.interest-bubble {
+  margin: 0;
+  justify-self: center;
+}
+
+/* Фіксуємо позиції кульок незалежно від порядку в DOM */
+.interest-bubble.bubble-left {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.interest-bubble.bubble-right {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* Плавна поява нової кульки */
+.interest-bubble {
+  animation:
+    balloonFloat 3.5s ease-in-out infinite;
+}
+
+/* Кулька, що з'являється після порівняння */
+.interest-bubble.bubble-entering {
+  animation:
+    balloonAppear 0.7s ease-out,
+    balloonFloat 3.5s ease-in-out 0.5s infinite;
+}
+
+/* Поява кульки */
+@keyframes balloonAppear {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Червоний хрестик на кульці */
+.bubble-cross {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #E53935;
+  font-size: 76px;
+  font-weight: 800;
+  line-height: 1;
+
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Лопання кульки */
+.interest-bubble.bubble-popping {
+  animation: balloonPop 0.6s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes balloonPop {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  35% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  65% {
+    transform: scale(0.65);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+/* Заголовок основної та додаткової характеристики */
+.interest-group-title {
+  font-size: 17px;
+  margin-bottom: 16px;
+}
+
+/* Тип професійної діяльності */
+.activity-type {
+  margin: 8px 0 14px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* Блок можливих професій */
+.interest-profile-card .characteristic-professions {
+  margin-top: 18px;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Запрошення до навчання */
+.profile-invitation {
+  margin: 18px 0;
+  line-height: 1.5;
+}
+
+/* Картка з описом профілю */
+.profile-learning-card {
+  margin-top: 16px;
+  padding: 20px 22px;
+  border-radius: 16px;
+  background: rgba(255, 240, 220, 0.75);
+  border: 1px solid rgba(242, 217, 184, 0.85);
+}
+
+.profile-learning-card h4 {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+
+.profile-learning-card p {
+  margin: 0;
+  line-height: 1.5;
+}
+/* Підказки про отримання результатів електронною поштою */
+.email-hint-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 12px 0 6px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(213, 228, 220, 0.65);
+  border: 1px solid #C5D9CE;
+  text-align: left;
+}
+
+.email-hint-card > span {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.email-hint-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+}
+#saveInterestCharacteristicButton {
+  background: var(--white);
+  color: var(--turquoise);
+  border: 2px solid var(--turquoise);
+}
+
+#saveInterestCharacteristicButton:hover {
+  background: var(--mint);
+}
+#skipEmailButton {
+  background: var(--white);
+  color: var(--turquoise);
+  border: 2px solid var(--turquoise);
+}
+
+#skipEmailButton:hover {
+  background: var(--mint);
+}
+
+/* Оцінювання дослідження зірочками */
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.rating-star {
+  padding: 4px;
+  border: none;
+  background: transparent;
+  color: var(--turquoise);
+  font-size: 42px;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.rating-star.selected {
+  color: var(--orange);
+}
+
+.rating-star:hover {
+  transform: scale(1.15);
+}
+/* Екран 12: дві колонки, як на фінальному екрані */
+#emailScreen {
+  width: min(100%, 1050px);
+  min-height: 650px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+}
+
+#emailScreen:not(.active) {
+  display: none;
+}
+
+#emailScreen.active {
+  display: grid;
+}
+
+/* Сова: не розтягуємо кремову область на всю висоту колонки */
+#emailScreen .owl-container {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: start;
+  height: 560px;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+#emailScreen .explanation-content {
+  grid-column: 2;
+  grid-row: 2;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 10px 16px;
+  box-sizing: border-box;
+}
+/* Екран 12: компактніше компонування правої колонки */
+
+#emailScreen .eyebrow {
+  margin-bottom: 6px;
+}
+
+#emailScreen h1 {
+  font-size: 44px;
+  line-height: 1.12;
+}
+
+#emailScreen .subtitle {
+  margin-top: 10px;
+  margin-bottom: 8px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+/* Компактніша картка оцінювання */
+#emailScreen .note-card {
+  margin-top: 4px;
+  padding: 10px 12px;
+  }
+
+#emailScreen .note-card p {
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+#emailScreen .rating-stars {
+  gap: 6px;
+}
+
+#emailScreen .rating-star {
+  font-size: 30px;
+  padding: 0;
+}
+
+/* Компактніший блок email */
+#emailScreen .email-input-card {
+  margin-top: 6px;
+  gap: 5px;
+}
+
+#emailScreen .input-hint {
+  margin-bottom: 2px;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+#emailScreen input[type="email"] {
+  padding: 9px 12px;
+}
+
+/* Менший проміжок перед кнопками */
+#emailScreen .character-actions {
+  margin-top: 2px;
+}
+
+/* Мобільна версія */
+@media (max-width: 700px) {
+  #emailScreen {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    min-height: auto;
+    padding: 18px;
+    gap: 16px;
+  }
+
+  #emailScreen .owl-container {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 360px;
+    height: 360px;
+  }
+
+  #emailScreen .explanation-content {
+    grid-column: 1;
+    grid-row: 3;
+    padding: 0;
+  }
+}
+/* Картка оцінювання: текст над зірками */
+#emailScreen .note-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  text-align: center;
+  border-radius: 18px;
+}
+
+#emailScreen .note-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+/* Зірочки */
+#emailScreen .rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+}
+
+#emailScreen .rating-star {
+  padding: 2px;
+  font-size: 32px;
+}
+
+/* Відступ після оцінювання */
+#emailScreen .email-input-card {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+#emailScreen .email-input-card label {
+  font-weight: 600;
+}
+
+/* Помітне запрошення залишити адресу */
+#emailScreen .input-hint {
+  margin: 0 0 2px;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+/* Поле email */
+#emailScreen input[type="email"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--white);
+  color: var(--text);
+  font: inherit;
+}
+/* Компактніше компонування картки email на екрані 12 */
+#emailScreen .email-input-card {
+  margin-top: 6px;
+  gap: 4px;
+}
+
+#emailScreen input[type="email"] {
+  padding: 7px 12px;
+}
+/* Екран 12: зірки та проміжок перед email */
+#emailScreen .rating-stars {
+  gap: 10px;
+}
+
+#emailScreen .rating-stars button {
+  font-size: 36px;
+}
+
+#emailScreen .email-input-card {
+  margin-top: 16px;
+}
+#emailScreen .email-input-card label {
+  font-weight: 400;
+}

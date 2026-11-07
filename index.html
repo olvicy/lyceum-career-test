@@ -1,0 +1,797 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#E6F7F2">
+  <title>Пізнай себе. Відкрий можливості!</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="app">
+
+    <!-- ЕКРАН 1. ВІТАННЯ -->
+    <section id="welcomeScreen" class="welcome-screen screen active">
+
+      <div class="lyceum-name">
+        Херсонський академічний ліцей<br>
+        імені О. В. Мішукова
+      </div>
+
+      <div class="owl-container">
+        <video
+          id="welcomeVideo"
+          class="owl-video"
+          autoplay
+          muted
+          playsinline
+          preload="auto"
+          loop
+        >
+          <source src="assets/video/owl_1.mp4" type="video/mp4">
+          Ваш браузер не підтримує відео.
+        </video>
+
+        <div class="speech-bubble">
+          Привіт! 👋 Запрошуємо дізнатися більше про себе,
+          свої інтереси та наш ліцей. Ну що, стартуємо?
+        </div>
+      </div>
+
+      <div class="intro">
+        <p class="eyebrow">ГРА-ДОСЛІДЖЕННЯ</p>
+        <h1>Пізнай себе.<br>Відкрий можливості!</h1>
+
+        <p class="subtitle">
+          Невелика пригода, яка допоможе відкрити нові
+          грані себе та познайомитися з освітніми напрямами.
+        </p>
+
+        <button id="startButton" class="primary-button">
+          Розпочати
+        </button>
+      </div>
+
+    </section>
+
+
+    <!-- ЕКРАН 2. ПОЧАТОК ДОСЛІДЖЕННЯ -->
+    <section id="startScreen" class="welcome-screen screen">
+
+      <div class="lyceum-name">
+        Херсонський академічний ліцей<br>
+        імені О. В. Мішукова
+      </div>
+
+      <div class="owl-container">
+        <video
+          id="startVideo"
+          class="owl-video"
+          muted
+          playsinline
+          preload="auto"
+        >
+          <source src="assets/video/owl_5.mp4" type="video/mp4">
+          Ваш браузер не підтримує відео.
+        </video>
+
+        <div class="speech-bubble">
+          Клас! 🎉 Почнімо з невеликого експерименту —
+          подивимося, що цікавого можна помітити у твоєму виборі!
+        </div>
+      </div>
+
+      <div class="intro">
+        <p class="eyebrow">ТВОЯ ПРИГОДА ПОЧИНАЄТЬСЯ</p>
+        <h1>Готовий<br>досліджувати?</h1>
+
+        <p class="subtitle">
+          Попереду кілька цікавих завдань. Тут не буде
+          правильних чи неправильних відповідей —
+          важливий саме твій вибір.
+        </p>
+
+        <button id="explanationButton" class="primary-button">
+          До пояснення
+        </button>
+      </div>
+
+    </section>
+
+        <!-- ЕКРАН 3. ПОЯСНЕННЯ КОНСТРУКТОРА -->
+    <section id="explanationScreen" class="explanation-screen screen">
+
+      <div class="lyceum-name">
+        Херсонський академічний ліцей<br>
+        імені О. В. Мішукова
+      </div>
+
+      <div class="explanation-content">
+        <p class="eyebrow">ПЕРШИЙ ЕТАП ДОСЛІДЖЕННЯ</p>
+
+        <h1>Створи свого персонажа!</h1>
+
+        <p class="subtitle">
+          Уяви, що ти створюєш власного персонажа з геометричних фігур.<br>
+          Яким він буде — вирішуєш тільки ти!
+        </p>
+
+        <div class="rules-card">
+          <h2>Як це працює?</h2>
+
+          <ul>
+            <li>Обирай геометричні фігури та розміщуй їх на робочому полі.</li>
+            <li>Можеш використовувати різні розміри й кольори.</li>
+            <li>Створи персонажа з максимум <span class="highlight-limit">10 елементів</span>.</li>
+            <li>Розташовуй фігури так, як тобі подобається: вони можуть торкатися й перекриватися.</li>
+            <li>Бажано розфарбувати створеного персонажа, використовуючи кольори, які тобі подобаються.</li>
+          </ul>
+        </div>
+
+        <div class="note-card">
+          <span class="note-icon">💡</span>
+          <p>
+            Створи з геометричних фігур маленьку <span class="highlight-word">людину</span>  — себе або вигаданого персонажа. Як виглядатимуть голова, тулуб, руки й ноги, де вони будуть розташовані та яких кольорів набудуть — вирішувати тобі!
+            Не потрібно створювати ідеальний малюнок —
+            просто експериментуй і обирай те, що тобі до вподоби!
+          </p>
+        </div>
+
+        <button id="constructorButton" class="primary-button centered-button">
+          До конструктора
+        </button>
+      </div>
+    </section>
+
+      <!-- ЕКРАН 4. КОНСТРУКТОР ПЕРСОНАЖА -->
+    <section id="constructorScreen" class="constructor-screen screen">
+
+    <div class="lyceum-name">
+        Херсонський академічний ліцей<br>
+        імені О. В. Мішукова
+    </div>
+
+    <div class="constructor-header">
+        <p class="eyebrow">ТВОРЧИЙ ЕКСПЕРИМЕНТ</p>
+        <h1>Створи свого персонажа!</h1>
+        <p class="subtitle">
+        Обирай фігури, кольори та створюй власну композицію.
+        </p>
+    </div>
+
+    
+    <div class="constructor-layout">
+
+        <!-- ПАНЕЛЬ ІНСТРУМЕНТІВ -->
+        <aside class="tools-panel">
+
+            <h2>Обери фігуру</h2>
+
+            <div class="shape-buttons">
+                <button class="shape-button" data-shape="circle" aria-label="Коло" title="Коло">
+                    <span class="shape-icon circle-icon"></span>
+                </button>
+
+                <button class="shape-button" data-shape="square" aria-label="Квадрат" title="Квадрат">
+                    <span class="shape-icon square-icon"></span>
+                </button>
+
+                <button class="shape-button" data-shape="rectangle" aria-label="Прямокутник" title="Прямокутник">
+                    <span class="shape-icon rectangle-icon"></span>
+                </button>
+
+                <button class="shape-button" data-shape="triangle" aria-label="Трикутник" title="Трикутник">
+                    <span class="shape-icon triangle-icon"></span>
+                </button>
+
+                <button class="shape-button" data-shape="zigzag" aria-label="Зигзаг" title="Зигзаг">
+                    <span class="shape-icon zigzag-icon"></span>
+                </button>
+            </div>
+
+            <div id="selectedShapePanel" class="selected-shape-panel" hidden>
+
+                <h2>Налаштуй фігуру</h2>
+
+                <p>Колір</p>
+                <div id="colorOptions" class="color-options">
+                    <button class="color-button" data-color="#E53935" style="--color: #E53935" aria-label="Червоний"></button>
+                    <button class="color-button" data-color="#FB8C00" style="--color: #FB8C00" aria-label="Помаранчевий"></button>
+                    <button class="color-button" data-color="#FDD835" style="--color: #FDD835" aria-label="Жовтий"></button>
+                    <button class="color-button" data-color="#43A047" style="--color: #43A047" aria-label="Зелений"></button>
+                    <button class="color-button" data-color="#1E88E5" style="--color: #1E88E5" aria-label="Синій"></button>
+                    <button class="color-button" data-color="#8E24AA" style="--color: #8E24AA" aria-label="Фіолетовий"></button>
+                    <button class="color-button" data-color="#FFFFFF" style="--color: #FFFFFF" aria-label="Білий"></button>
+                    <button class="color-button" data-color="#263238" style="--color: #263238" aria-label="Чорний"></button>
+                </div>
+
+                <p>Розмір</p>
+                <div class="size-buttons">
+                    <button class="size-button" data-size="small">Малий</button>
+                    <button class="size-button" data-size="medium">Середній</button>
+                    <button class="size-button" data-size="large">Великий</button>
+                </div>
+
+                <!-- ПОВОРОТ І ТОЧНЕ ПЕРЕМІЩЕННЯ -->
+                <div class="transform-controls">
+
+                    <div class="rotation-group">
+                        <p>Поворот</p>
+                        <div class="rotation-buttons">
+                            <button class="rotation-button" data-rotation="-45" aria-label="Повернути проти годинникової стрілки">
+                                ↶ −45°
+                            </button>
+                            <button class="rotation-button" data-rotation="45" aria-label="Повернути за годинниковою стрілкою">
+                                ↷ +45°
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="nudge-group">
+                        <p>Точне переміщення</p>
+                        <div class="nudge-buttons">
+                            <button class="nudge-button" data-x="0" data-y="-5" aria-label="Перемістити вгору">↑</button>
+                            <button class="nudge-button" data-x="-5" data-y="0" aria-label="Перемістити ліворуч">←</button>
+                            <button class="nudge-button" data-x="0" data-y="5" aria-label="Перемістити вниз">↓</button>
+                            <button class="nudge-button" data-x="5" data-y="0" aria-label="Перемістити праворуч">→</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- КНОПКИ ДІЙ -->
+            <div class="editing-buttons">
+                <button id="moveButton">Перемістити</button>
+                <button id="groupSelectButton">Вибрати кілька</button>
+                <button id="deleteButton">Видалити фігуру</button>
+                <button id="undoButton" disabled>Скасувати дію</button>
+            </div>
+
+        </aside>
+
+        <!-- РОБОЧЕ ПОЛЕ ТА РЕЗУЛЬТАТ -->
+        <div class="workspace-container">
+
+            <div id="workspace" class="workspace">
+
+                <svg
+                    class="selection-outline"
+                    id="selectionOutline"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                >
+                    <path id="selectionOutlinePath"></path>
+                </svg>
+
+                <div id="selectionBox" class="selection-box" hidden></div>
+
+                <p class="workspace-hint">
+                    Обери фігуру зліва та натисни на поле, щоб додати її.
+                </p>
+
+            </div>
+
+            <div class="workspace-footer">
+                <p id="elementCounter">Елементів: 0 / 10</p>
+
+                <button id="finishConstructorButton" class="finish-button" disabled>
+                    Мій персонаж готовий!
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    </section>
+
+   <!-- ЕКРАН 5. РЕЗУЛЬТАТ ПЕРШОГО ЕТАПУ -->
+
+    <section id="characterScreen" class="welcome-screen screen">
+
+      <div class="lyceum-name">
+        Херсонський академічний ліцей<br>
+        імені О. В. Мішукова
+      </div>
+
+      <div class="owl-container">
+        <video
+          id="characterVideo"
+          class="owl-video"
+          muted
+          playsinline
+          preload="auto"
+        >
+          <source src="assets/video/owl_2.mp4" type="video/mp4">
+          Ваш браузер не підтримує відео.
+        </video>
+
+        <div class="speech-bubble">
+          Ось що в тебе вийшло. Чудова робота!
+          Цікаво, що може підказати твій вибір?
+          Читаймо характеристику! 🔎
+        </div>
+      </div>
+
+      <div class="intro">
+        <p class="eyebrow">ПЕРШИЙ ЕТАП ДОСЛІДЖЕННЯ</p>
+        <h1>Твій персонаж готовий!</h1>
+
+        <div id="characterPreview" class="character-preview">
+          <!-- Тут з'явиться створений персонаж -->
+        </div>
+      </div>
+
+      <div class="email-hint-card">
+        <span>💌</span>
+        <p>
+          Наприкінці дослідження ти зможеш отримати всі результати
+          одним файлом на e-mail. Але зображення свого персонажа
+          можна зберегти і зараз.
+        </p>
+      </div>
+
+      <div class="character-actions">
+        <button id="saveCharacterButton" class="primary-button">
+          Зберегти зображення
+        </button>
+
+        <button id="readCharacteristicButton" class="primary-button">
+          Прочитати характеристику
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ЕКРАН 6. ХАРАКТЕРИСТИКА ЗА РЕЗУЛЬТАТАМИ ПЕРШОГО ЕТАПУ -->
+    <section id="characteristicScreen" class="explanation-screen screen">
+
+      <div class="lyceum-name">
+        Херсонський академічний ліцей<br>
+        імені О. В. Мішукова
+      </div>
+
+      <div class="explanation-content">
+        <p class="eyebrow">ПЕРШИЙ ЕТАП ДОСЛІДЖЕННЯ</p>
+
+        <h1>Твоя характеристика</h1>
+
+        <p class="subtitle">
+          Твій персонаж може підказати, які риси та способи мислення
+          тобі близькі. Подивімося, що розповість твій вибір!
+        </p>
+
+        <div id="shapeCharacteristicResults" class="characteristic-results">
+          <!-- JavaScript додасть картки з основними та додатковими типажами -->
+        </div>
+        <div id="colorCharacteristicResults" class="color-characteristic-results"></div>
+        
+               
+        <div class="note-card compact-note">
+          <span class="note-icon">💡</span>
+          <p>
+            Це не психологічний тест і не остаточний висновок про тебе.
+            Сприймай характеристику як підказку для самопізнання:
+            твої інтереси, здібності й можливості набагато ширші за будь-який опис!
+          </p>
+        </div>
+
+        <div class="email-hint-card">
+          <span>📩</span>
+          <p>
+            Ця характеристика також увійде до файлу, який можна отримати на електронну пошту. 
+            Але можеш зберегти її вже зараз.
+          </p>
+        </div>
+
+        <div class="character-actions">
+          <button id="saveCharacteristicButton" class="primary-button">
+            Зберегти характеристику
+          </button>
+          <button id="continueToSecondStageButton" class="primary-button">
+            Продовжити дослідження
+          </button>
+          </div>
+      </div>
+
+    </section>
+
+    <!-- ЕКРАН 7. ЗАПРОШЕННЯ ДО ДРУГОГО ЕТАПУ -->
+    <section id="secondStageScreen" class="welcome-screen screen">
+      <div class="lyceum-name">
+        Херсонський академічний ліцей<br>
+        імені О. В. Мішукова
+      </div>
+
+      <div class="owl-container">
+        <video id="secondStageVideo" class="owl-video" muted playsinline preload="auto">
+          <source src="assets/video/owl_4.mp4" type="video/mp4">
+          Ваш браузер не підтримує відео.
+        </video>
+
+        <div class="speech-bubble">
+          Це лише перша підказка про тебе! 😉
+          А тепер дізнаймося більше: що тобі цікаво,
+          що захоплює і що хотілося б спробувати?
+        </div>
+      </div>
+
+      <div class="intro">
+        <p class="eyebrow">ДРУГИЙ ЕТАП ДОСЛІДЖЕННЯ</p>
+
+        <h1>Тепер — про твої інтереси!</h1>
+
+        <p class="subtitle">
+          Що тебе захоплює? Які заняття приносять задоволення?
+          До чого хочеться повертатися знову і знову?
+          Дізнаймося, які освітні напрями можуть бути тобі близькими!
+        </p>
+
+        <button id="startSecondStageButton" class="primary-button">
+          До пояснення
+        </button>
+      </div>
+    </section>
+
+    
+    <!-- ЕКРАН 8. ПОЯСНЕННЯ ДОСЛІДЖЕННЯ ІНТЕРЕСІВ -->
+    <section id="interestExplanationScreen" class="explanation-screen screen">
+
+      <div class="lyceum-name">
+        Херсонський академічний ліцей<br>
+        імені О. В. Мішукова
+      </div>
+
+      <div class="explanation-content">
+        <p class="eyebrow">ДРУГИЙ ЕТАП ДОСЛІДЖЕННЯ</p>
+
+        <h1>Досліди свої інтереси!</h1>
+
+        <p class="subtitle">
+          Перед тобою з'являтимуться пари хмаринок із різними твердженнями.
+          Обирай те, що тобі цікавіше!
+        </p>
+
+        <div class="rules-card">
+          <h2>Як це працює?</h2>
+
+          <ul>
+            <li>У кожному раунді порівнюй дві хмаринки з різними твердженнями.</li>
+            <li>Натискай на ту хмаринку, яка <span class="highlight-limit">більше тебе цікавить</span>.</li>
+            <li>Хмаринка, що залишилася, переходить до наступного порівняння.</li>
+            <li>Якщо твердження залишається після кількох порівнянь, твій інтерес до нього враховується щоразу.</li>
+          </ul>
+        </div>
+
+        <div class="note-card">
+          <span class="note-icon">💡</span>
+          <p>
+            Тут немає правильних чи неправильних відповідей!
+            Обирай щиро, орієнтуючись на власні інтереси.
+            Не намагайся вгадати, який варіант вважається кращим, —
+            важливо лише те, що цікаво саме тобі!
+          </p>
+        </div>
+
+        <button id="startInterestTestButton" class="primary-button centered-button">
+          До дослідження інтересів
+        </button>
+      </div>
+    </section>
+
+    <!-- ЕКРАН 9. ДОСЛІДЖЕННЯ ІНТЕРЕСІВ -->
+    <section id="secondTestScreen" class="constructor-screen screen">
+
+      <div class="lyceum-name">
+        Херсонський академічний ліцей<br>
+        імені О. В. Мішукова
+      </div>
+
+      <div class="constructor-header">
+        <p class="eyebrow">ДРУГИЙ ЕТАП ДОСЛІДЖЕННЯ</p>
+        <h1>Що тебе захоплює?</h1>
+        <p class="subtitle">
+          Порівнюй дві кульки та обирай ту, яка більше тебе цікавить.
+        </p>
+      </div>
+
+      <div class="constructor-layout interest-test-layout">
+
+        <!-- ПАНЕЛЬ СПОСТЕРЕЖЕННЯ СОВИ -->
+        <aside class="tools-panel interest-owl-panel">
+
+          <div class="owl-container interest-owl-container">
+
+            <div class="speech-bubble interest-owl-bubble">
+              <p id="interestOwlMessage">
+                Обирай те, що справді цікавіше саме тобі!
+              </p>
+
+              <div class="interest-progress-track">
+                <div id="interestProgressBar" class="interest-progress-fill"></div>
+              </div>
+            </div>
+
+            <video
+              id="interestOwlVideo"
+              class="owl-video"
+              autoplay
+              muted
+              playsinline
+              loop
+              preload="auto"
+            >
+              <source src="assets/video/owl_3.mp4" type="video/mp4">
+              Ваш браузер не підтримує відео.
+            </video>
+
+          </div>
+
+        </aside>
+
+        <!-- РОБОЧЕ ПОЛЕ З ПОВІТРЯНИМИ КУЛЬКАМИ -->
+        <div class="workspace-container interest-workspace-container">
+
+          <div id="bubbleComparison" class="workspace interest-workspace">
+
+            <!-- JavaScript додаватиме сюди дві рухомі кульки -->
+
+          </div>
+
+          <div class="workspace-footer interest-test-footer">
+            <button
+              id="readInterestCharacteristicButton"
+              class="finish-button"
+              disabled
+            >
+              Мої вибори готові!
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ЕКРАН 10. РЕЗУЛЬТАТИ ДОСЛІДЖЕННЯ ІНТЕРЕСІВ -->
+    <section id="interestResultsScreen" class="welcome-screen screen">
+
+      <div class="lyceum-name">
+        Херсонський академічний ліцей<br>
+        імені О. В. Мішукова
+      </div>
+
+      <div class="owl-container">
+        <video
+          id="interestResultsOwlVideo"
+          class="owl-video"
+          muted
+          playsinline
+          preload="auto"
+        >
+          <source src="assets/video/owl_2.mp4" type="video/mp4">
+          Ваш браузер не підтримує відео.
+        </video>
+
+        <div class="speech-bubble">
+          Чудово! 🎉 Ти завершив другий етап дослідження.
+          Тепер подивімося, що можуть підказати твої вибори!
+        </div>
+      </div>
+
+      <div class="intro">
+        <p class="eyebrow">РЕЗУЛЬТАТИ ДРУГОГО ЕТАПУ</p>
+
+        <h1>Твої зацікавлення!</h1>
+
+        <p class="subtitle">
+          Твої вибори допомогли окреслити сфери діяльності,
+          які можуть бути тобі близькими. Час прочитати характеристику!
+        </p>
+
+        <button id="continueToFinalButton" class="primary-button">
+          Прочитати характеристику
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ЕКРАН 11. ХАРАКТЕРИСТИКА ЗА РЕЗУЛЬТАТАМИ ДРУГОГО ЕТАПУ -->
+    <section id="interestCharacteristicScreen" class="explanation-screen screen">
+
+      <div class="lyceum-name">
+        Херсонський академічний ліцей<br>
+        імені О. В. Мішукова
+      </div>
+
+      <div class="explanation-content">
+
+        <p class="eyebrow">ДРУГИЙ ЕТАП ДОСЛІДЖЕННЯ</p>
+
+        <h1>Твоя характеристика інтересів</h1>
+
+        <p class="subtitle">
+          Твої вибори підказують, які сфери діяльності та напрями навчання
+          можуть бути тобі близькими. Подивімося, що вони розповідають!
+        </p>
+
+        <div id="interestCharacteristicResults" class="characteristic-results">
+          <!-- JavaScript додасть картки з характеристиками рекомендованих профілів -->
+        </div>
+
+            
+        <div class="note-card compact-note">
+          <span class="note-icon">💡</span>
+          <p>
+            Це не остаточний вибір майбутньої професії.
+            Сприймай результати як можливість краще зрозуміти свої
+            зацікавлення та відкрити нові напрями для дослідження.
+          </p>
+        </div>
+
+        <div class="email-hint-card">
+          <span>📩</span>
+          <p>
+            Обидві характеристики та зображення персонажа можна буде отримати одним файлом на e-mail. 
+            Але результати другого дослідження можеш зберегти вже зараз.
+          </p>
+        </div>
+
+        <div class="character-actions">
+          <button id="saveInterestCharacteristicButton" class="primary-button">
+            Зберегти характеристику
+          </button>
+        
+          <button id="continueToEmailScreenButton" class="primary-button">
+            Отримати всі результати
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+<!-- ЕКРАН 12. ВРАЖЕННЯ ТА ОТРИМАННЯ РЕЗУЛЬТАТІВ -->
+<section id="emailScreen" class="explanation-screen screen">
+
+  <div class="lyceum-name">
+    Херсонський академічний ліцей<br>
+    імені О. В. Мішукова
+  </div>
+
+  <!-- ЛІВА КОЛОНКА: СОВА -->
+  <div class="owl-container">
+    <video
+      id="emailVideo"
+      class="owl-video"
+      autoplay
+      muted
+      playsinline
+      preload="auto"
+    >
+      <source src="assets/video/owl_5.mp4" type="video/mp4">
+      Ваш браузер не підтримує відео.
+    </video>
+
+    <div class="speech-bubble">
+      Ну як, щось відгукнулося?
+    </div>
+  </div>
+
+  <!-- ПРАВА КОЛОНКА: ТЕКСТ ТА ФОРМА -->
+  <div class="explanation-content">
+
+    <p class="eyebrow">ЗАВЕРШАЛЬНИЙ ЕТАП ДОСЛІДЖЕННЯ</p>
+
+    <h1>Твої враження важливі!</h1>
+
+    <p class="subtitle">
+      Поділися, чи сподобалася тобі ця невелика пригода.
+      А якщо захочеш повернутися до своїх відкриттів,
+      ми надішлемо результати дослідження на твою електронну пошту.
+    </p>
+
+    <!-- ОЦІНЮВАННЯ -->
+    <div class="note-card">
+      <p>Оціни, наскільки тобі сподобалося дослідження</p>
+
+      <div id="ratingStars" class="rating-stars">
+        <button type="button" class="rating-star" data-rating="1"
+          aria-label="1 зірка">★</button>
+        <button type="button" class="rating-star" data-rating="2"
+          aria-label="2 зірки">★</button>
+        <button type="button" class="rating-star" data-rating="3"
+          aria-label="3 зірки">★</button>
+        <button type="button" class="rating-star" data-rating="4"
+          aria-label="4 зірки">★</button>
+        <button type="button" class="rating-star" data-rating="5"
+          aria-label="5 зірок">★</button>
+      </div>
+    </div>
+
+    <!-- EMAIL -->
+    <div class="email-input-card">
+      <p class="input-hint">
+        Залиш адресу, якщо хочеш отримати файл із результатами дослідження.
+      </p>
+
+      <label for="studentEmail">Твій email</label>
+
+      <input
+        type="email"
+        id="studentEmail"
+        placeholder="name@example.com"
+        autocomplete="email"
+      >
+    </div>
+
+    <!-- КНОПКИ -->
+    <div class="character-actions">
+      <button id="sendResultsButton" class="primary-button">
+        Надіслати результати
+      </button>
+
+      <button id="skipEmailButton" class="primary-button">
+        Дякую, не зараз
+      </button>
+    </div>
+
+  </div>
+</section>    
+
+<!-- ЕКРАН 13. ЗАВЕРШЕННЯ ДОСЛІДЖЕННЯ -->
+<section id="farewellScreen" class="welcome-screen screen">
+  <div class="lyceum-name">
+    Херсонський академічний ліцей<br>
+    імені О. В. Мішукова
+  </div>
+
+  <div class="owl-container">
+    <video
+      id="farewellVideo"
+      class="owl-video"
+      autoplay
+      muted
+      playsinline
+      preload="auto"
+    >
+      <source src="assets/video/owl_6.mp4" type="video/mp4">
+      Ваш браузер не підтримує відео.
+    </video>
+
+    <div class="speech-bubble">
+      Дякую, що завітав! 👋
+      Досліджуй, пробуй і знаходь своє.
+      Можливо, побачимося в нашому ліцеї! 💚
+    </div>
+  </div>
+
+  <div class="intro">
+    <p class="eyebrow">ДОСЛІДЖЕННЯ ЗАВЕРШЕНО</p>
+
+    <h1>Попереду ще багато відкриттів!</h1>
+
+    <p class="subtitle">
+      Кожне нове захоплення, спроба та досвід допомагають
+      краще зрозуміти себе. Не бійся експериментувати,
+      відкривати нове й шукати те, що надихає саме тебе!
+    </p>
+
+    <button id="restartButton" class="primary-button">
+      Пройти ще раз
+    </button>
+  </div>
+</section>
+
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
