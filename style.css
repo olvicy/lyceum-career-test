@@ -2124,3 +2124,33 @@ cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width=
     min-height: auto;
   }
 }
+/* Дослідження інтересів: горизонтальна орієнтація телефона */
+@media (max-width: 900px) and (orientation: landscape) {
+
+  #secondTestScreen .interest-test-layout {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 12px;
+  }
+
+  #secondTestScreen .interest-workspace-container {
+    min-width: 0;
+  }
+
+  #secondTestScreen #bubbleComparison {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    min-height: 220px;
+    padding: 18px 8px;
+  }
+
+  #secondTestScreen .interest-bubble {
+    width: min(170px, calc(50vw - 40px));
+    height: 160px;
+    min-height: 160px;
+    padding: 16px 10px;
+    font-size: 12px;
+    line-height: 1.3;
+    box-sizing: border-box;
+  }
+
+}
