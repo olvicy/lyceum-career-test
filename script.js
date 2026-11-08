@@ -859,6 +859,124 @@ function getActiveSelection() {
 
   return [];
 }
+// Повернуті фігури займають більше місця, ніж їхні початкові розміри.
+// Обчислюємо половину ширини та висоти їхньої фактичної рамки.
+function getShapeHalfBounds(item) {
+  const radians = (item.rotation || 0) * Math.PI / 180;
+  const width = item.element.offsetWidth;
+  const height = item.element.offsetHeight;
+
+  return {
+    halfWidth: (
+      Math.abs(width * Math.cos(radians)) +
+      Math.abs(height * Math.sin(radians))
+    ) / 2,
+    halfHeight: (
+      Math.abs(width * Math.sin(radians)) +
+      Math.abs(height * Math.cos(radians))
+    ) / 2
+  };
+}
+
+// Уміщуємо всю композицію в робоче поле після зміни його розмірів.
+// Взаємне розташування фігур і кути їхнього повороту зберігаються.
+function fitElementsIntoWorkspace() {
+  if (!workspace || elements.length === 0) return;
+
+  const fieldWidth = workspace.clientWidth;
+  const fieldHeight = workspace.clientHeight;
+
+  if (fieldWidth <= 0 || fieldHeight <= 0) return;
+
+  const padding = 4;
+
+  const getCompositionBounds = () => {
+    const bounds = elements.map(item => {
+      const { halfWidth, halfHeight } = getShapeHalfBounds(item);
+
+      return {
+        left: item.x - halfWidth,
+        right: item.x + halfWidth,
+        top: item.y - halfHeight,
+        bottom: item.y + halfHeight
+      };
+    });
+
+    return {
+      left: Math.min(...bounds.map(bound => bound.left)),
+      right: Math.max(...bounds.map(bound => bound.right)),
+      top: Math.min(...bounds.map(bound => bound.top)),
+      bottom: Math.max(...bounds.map(bound => bound.bottom))
+    };
+  };
+
+  let bounds = getCompositionBounds();
+  let compositionWidth = bounds.right - bounds.left;
+  let compositionHeight = bounds.bottom - bounds.top;
+
+  // Якщо композиція завелика, пропорційно зменшуємо всі фігури
+  // та відстані між ними, не змінюючи їхньої форми.
+  const scale = Math.min(
+    1,
+    (fieldWidth - padding * 2) / compositionWidth,
+    (fieldHeight - padding * 2) / compositionHeight
+  );
+
+  if (Number.isFinite(scale) && scale < 0.999) {
+    const centerX = (bounds.left + bounds.right) / 2;
+    const centerY = (bounds.top + bounds.bottom) / 2;
+
+    elements.forEach(item => {
+      const newWidth = item.element.offsetWidth * scale;
+      const newHeight = item.element.offsetHeight * scale;
+
+      item.element.style.width = `${newWidth}px`;
+      item.element.style.height = `${newHeight}px`;
+      item.x = centerX + (item.x - centerX) * scale;
+      item.y = centerY + (item.y - centerY) * scale;
+
+      item.element.style.left = `${item.x}px`;
+      item.element.style.top = `${item.y}px`;
+    });
+  }
+
+  // Після масштабування (або якщо воно не знадобилося)
+  // зсуваємо композицію всередину поля, якщо вона торкається краю.
+  bounds = getCompositionBounds();
+
+  let shiftX = 0;
+  let shiftY = 0;
+
+  if (bounds.left < padding) {
+    shiftX = padding - bounds.left;
+  } else if (bounds.right > fieldWidth - padding) {
+    shiftX = fieldWidth - padding - bounds.right;
+  }
+
+  if (bounds.top < padding) {
+    shiftY = padding - bounds.top;
+  } else if (bounds.bottom > fieldHeight - padding) {
+    shiftY = fieldHeight - padding - bounds.bottom;
+  }
+
+  if (shiftX !== 0 || shiftY !== 0) {
+    elements.forEach(item => {
+      item.x += shiftX;
+      item.y += shiftY;
+      item.element.style.left = `${item.x}px`;
+      item.element.style.top = `${item.y}px`;
+    });
+  }
+
+  if (selectedElements.length > 0) {
+    // Групове виділення не потребує окремого контуру.
+    return;
+  }
+
+  if (selectedElement) {
+    updateSelectionOutline(selectedElement);
+  }
+}
 
 // Повністю очищує поточне виділення
 function clearSelection() {
@@ -1057,7 +1175,7 @@ document.getElementById("restartButton").addEventListener("click", () => {
 
   setTimeout(() => {
     window.location.reload();
-  }, 950);
+  }, 1000);
 });
 
 // КОНСТРУКТОР: ДОДАВАННЯ ТА ВИБІР ФІГУР
@@ -1106,6 +1224,9 @@ sizeButtons.forEach(button => {
 
       item.size = size;
     });
+
+    // Якщо збільшена фігура не вміщується, адаптуємо композицію до поля.
+    fitElementsIntoWorkspace();
 
     // Оновлюємо підсвічування розміру
     updateSizeButtons(selection[0]);
@@ -1218,16 +1339,18 @@ nudgeButtons.forEach(button => {
 
     // Перевіряємо, чи можна перемістити всю вибірку
     const canMove = selection.every(item => {
-      const newX = item.x + dx;
-      const newY = item.y + dy;
+    const newX = item.x + dx;
+    const newY = item.y + dy;
 
-      return (
-        newX >= item.element.offsetWidth / 2 &&
-        newX <= workspace.clientWidth - item.element.offsetWidth / 2 &&
-        newY >= item.element.offsetHeight / 2 &&
-        newY <= workspace.clientHeight - item.element.offsetHeight / 2
-      );
-    });
+    const { halfWidth, halfHeight } = getShapeHalfBounds(item);
+
+    return (
+      newX >= halfWidth &&
+      newX <= workspace.clientWidth - halfWidth &&
+      newY >= halfHeight &&
+      newY <= workspace.clientHeight - halfHeight
+    );
+  });
 
     if (!canMove) return;
 
@@ -1312,21 +1435,25 @@ let deltaX = x - firstElement.x;
 let deltaY = y - firstElement.y;
 
 // Визначаємо допустимі межі переміщення всієї групи
-const minDeltaX = Math.max(...selection.map(item =>
-  item.element.offsetWidth / 2 - item.x
-));
+const minDeltaX = Math.max(...selection.map(item => {
+  const { halfWidth } = getShapeHalfBounds(item);
+  return halfWidth - item.x;
+}));
 
-const maxDeltaX = Math.min(...selection.map(item =>
-  workspace.clientWidth - item.element.offsetWidth / 2 - item.x
-));
+const maxDeltaX = Math.min(...selection.map(item => {
+  const { halfWidth } = getShapeHalfBounds(item);
+  return workspace.clientWidth - halfWidth - item.x;
+}));
 
-const minDeltaY = Math.max(...selection.map(item =>
-  item.element.offsetHeight / 2 - item.y
-));
+const minDeltaY = Math.max(...selection.map(item => {
+  const { halfHeight } = getShapeHalfBounds(item);
+  return halfHeight - item.y;
+}));
 
-const maxDeltaY = Math.min(...selection.map(item =>
-  workspace.clientHeight - item.element.offsetHeight / 2 - item.y
-));
+const maxDeltaY = Math.min(...selection.map(item => {
+  const { halfHeight } = getShapeHalfBounds(item);
+  return workspace.clientHeight - halfHeight - item.y;
+}));
 
 // Обмежуємо переміщення межами робочого поля
 deltaX = Math.max(minDeltaX, Math.min(deltaX, maxDeltaX));
@@ -1524,6 +1651,9 @@ function restoreState(state) {
   }
 
   updateElementCounter();
+
+  // Після скасування також перевіряємо межі: поле могло змінити розмір.
+  fitElementsIntoWorkspace();
 }
 
 // Скасування останньої дії
@@ -1714,6 +1844,31 @@ if (elements.length === 0) return;
 
     characterPreview.appendChild(copy);
   });
+}
+
+// Адаптація фігур після зміни орієнтації або розміру робочого поля.
+let workspaceResizeFrame = null;
+
+function handleWorkspaceResize() {
+  if (!constructorScreen.classList.contains("active")) return;
+
+  if (workspaceResizeFrame) {
+    cancelAnimationFrame(workspaceResizeFrame);
+  }
+
+  workspaceResizeFrame = requestAnimationFrame(() => {
+    fitElementsIntoWorkspace();
+    workspaceResizeFrame = null;
+  });
+}
+
+// ResizeObserver реагує саме на зміну розмірів поля, а не лише вікна.
+if ("ResizeObserver" in window) {
+  const workspaceObserver = new ResizeObserver(handleWorkspaceResize);
+  workspaceObserver.observe(workspace);
+} else {
+  window.addEventListener("resize", handleWorkspaceResize);
+  window.addEventListener("orientationchange", handleWorkspaceResize);
 }
 
 // Оновлення персонажа після зміни розміру вікна

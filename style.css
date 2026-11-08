@@ -1814,46 +1814,170 @@ cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width=
 #emailScreen .email-input-card label {
   font-weight: 400;
 }
-
 /* КОНСТРУКТОР: горизонтальна орієнтація телефона */
 @media (max-width: 900px) and (orientation: landscape) {
 
   #constructorScreen {
     min-height: auto;
-    padding: 16px;
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  #constructorScreen > .lyceum-name {
+    display: none;
+  }
+
+  #constructorScreen .constructor-header .eyebrow {
+    margin-bottom: 4px;
+    font-size: 11px;
+  }
+
+  #constructorScreen .constructor-header h1 {
+    font-size: 24px;
+  }
+
+  #constructorScreen .constructor-header .subtitle {
+    margin: 5px auto 0;
+    font-size: 12px;
   }
 
   #constructorScreen .constructor-layout {
-    grid-template-columns: 230px minmax(0, 1fr);
-    gap: 14px;
-    align-items: stretch;
+    grid-template-columns: 270px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
   }
 
+  /* Панель інструментів прокручується окремо */
   #constructorScreen .tools-panel {
-    padding: 14px;
+    padding: 10px;
+    max-height: calc(100vh - 125px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  #constructorScreen .workspace {
-    min-height: 300px;
+  #constructorScreen .tools-panel h2 {
+    margin-bottom: 8px;
+    font-size: 16px;
   }
 
+  /* Компактніші кнопки фігур */
   #constructorScreen .shape-buttons {
-    gap: 8px 5px;
-    margin-bottom: 14px;
+    gap: 5px;
+    margin-bottom: 10px;
   }
 
   #constructorScreen .shape-button {
-    min-height: 48px;
-    padding: 6px;
+    min-height: 44px;
+    padding: 4px;
+  }
+
+  #constructorScreen .shape-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  #constructorScreen .rectangle-icon {
+    width: 42px;
+    height: 27px;
+  }
+
+  #constructorScreen .triangle-icon {
+    width: 0;
+    height: 0;
+    border-left-width: 19px;
+    border-right-width: 19px;
+    border-bottom-width: 34px;
+  }
+
+  #constructorScreen .zigzag-icon {
+    width: 42px;
+    height: 30px;
+  }
+
+  /* Компактніші налаштування */
+  #constructorScreen .selected-shape-panel {
+    padding-top: 10px;
+  }
+
+  #constructorScreen .selected-shape-panel p {
+    margin: 8px 0 6px;
   }
 
   #constructorScreen .color-options {
-    grid-template-columns: repeat(6, 1fr);
-    gap: 6px;
+    gap: 5px;
   }
 
   #constructorScreen .color-button {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
   }
+
+  #constructorScreen .size-button {
+    padding: 6px 8px;
+  }
+
+  #constructorScreen .rotation-button {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  #constructorScreen .nudge-buttons {
+    gap: 5px;
+  }
+
+  #constructorScreen .nudge-button {
+    width: 34px;
+    height: 32px;
+    font-size: 17px;
+  }
+
+  #constructorScreen .editing-buttons {
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  #constructorScreen .editing-buttons button {
+    min-height: 36px;
+    padding: 6px 4px;
+    font-size: 11px;
+  }
+
+  #constructorScreen #undoButton {
+    margin-top: 0;
+  }
+
+  /* Робоче поле залишається поруч із панеллю */
+  #constructorScreen .workspace-container {
+    position: sticky;
+    top: 8px;
+    align-self: start;
+    min-width: 0;
+  }
+
+  #constructorScreen .workspace {
+    min-height: min(300px, calc(100vh - 150px));
+  }
+}
+/* КОНСТРУКТОР: портретна орієнтація телефона і планшета */
+@media (max-width: 900px) and (orientation: portrait) {
+
+  #constructorScreen .tools-panel {
+    padding: 12px;
+  }
+
+  #constructorScreen .tools-panel h2 {
+    margin-bottom: 8px;
+  }
+
+  /* Компактніше розташування фігур */
+  #constructorScreen .shape-buttons {
+    gap: 4px 6px;
+    margin-bottom: 12px;
+  }
+
+  #constructorScreen .shape-button {
+    min-height: 50px;
+    padding: 3px;
+  }
+
 }
