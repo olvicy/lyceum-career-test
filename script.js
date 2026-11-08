@@ -1053,6 +1053,11 @@ document.getElementById("skipEmailButton").addEventListener("click", () => {
 // Повторне проходження інтерактиву з самого початку
 document.getElementById("restartButton").addEventListener("click", () => {
   window.location.reload();
+  playScreenTransitionSound();
+
+  setTimeout(() => {
+    window.location.reload();
+  }, 950);
 });
 
 // КОНСТРУКТОР: ДОДАВАННЯ ТА ВИБІР ФІГУР
@@ -2514,6 +2519,7 @@ document.getElementById("sendResultsButton").addEventListener("click", () => {
       // Перехід до фінального екрана
       document.getElementById("emailScreen").classList.remove("active");
       document.getElementById("farewellScreen").classList.add("active");
+      playScreenTransitionSound();
 
     } catch (error) {
       console.error("Помилка передавання результатів:", error);

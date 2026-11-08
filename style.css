@@ -1814,3 +1814,46 @@ cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width=
 #emailScreen .email-input-card label {
   font-weight: 400;
 }
+
+/* КОНСТРУКТОР: горизонтальна орієнтація телефона */
+@media (max-width: 900px) and (orientation: landscape) {
+
+  #constructorScreen {
+    min-height: auto;
+    padding: 16px;
+  }
+
+  #constructorScreen .constructor-layout {
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  #constructorScreen .tools-panel {
+    padding: 14px;
+  }
+
+  #constructorScreen .workspace {
+    min-height: 300px;
+  }
+
+  #constructorScreen .shape-buttons {
+    gap: 8px 5px;
+    margin-bottom: 14px;
+  }
+
+  #constructorScreen .shape-button {
+    min-height: 48px;
+    padding: 6px;
+  }
+
+  #constructorScreen .color-options {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+
+  #constructorScreen .color-button {
+    width: 26px;
+    height: 26px;
+  }
+}
