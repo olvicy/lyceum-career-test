@@ -494,6 +494,11 @@ const selectedShapePanel = document.getElementById("selectedShapePanel");
 let selectedShapeType = null;
 let selectedElement = null;
 let elements = [];
+// Поточний масштаб і зміщення композиції в робочому полі
+let workspaceLayoutScale = 1;
+let workspaceLayoutOffsetX = 0;
+let workspaceLayoutOffsetY = 0;
+
 // Остаточний знімок персонажа для загальної характеристики
 let savedCharacterData = null;
 const maxElements = 10;
@@ -859,8 +864,7 @@ function getActiveSelection() {
 
   return [];
 }
-// Повернуті фігури займають більше місця, ніж їхні початкові розміри.
-// Обчислюємо половину ширини та висоти їхньої фактичної рамки.
+// Обчислюємо половину розмірів повернутої фігури
 function getShapeHalfBounds(item) {
   const radians = (item.rotation || 0) * Math.PI / 180;
   const width = item.element.offsetWidth;
@@ -878,8 +882,48 @@ function getShapeHalfBounds(item) {
   };
 }
 
-// Уміщуємо всю композицію в робоче поле після зміни його розмірів.
-// Взаємне розташування фігур і кути їхнього повороту зберігаються.
+// Обчислюємо межі фігури за її початковими розмірами
+function getBaseShapeHalfBounds(item) {
+  const radians = (item.rotation || 0) * Math.PI / 180;
+  const width = item.baseWidth;
+  const height = item.baseHeight;
+
+  return {
+    halfWidth: (
+      Math.abs(width * Math.cos(radians)) +
+      Math.abs(height * Math.sin(radians))
+    ) / 2,
+    halfHeight: (
+      Math.abs(width * Math.sin(radians)) +
+      Math.abs(height * Math.cos(radians))
+    ) / 2
+  };
+}
+// Оновлюємо початкові координати після переміщення фігури
+function syncBasePosition(item) {
+  item.baseX =
+    (item.x - workspaceLayoutOffsetX) / workspaceLayoutScale;
+
+  item.baseY =
+    (item.y - workspaceLayoutOffsetY) / workspaceLayoutScale;
+}
+// Перевіряємо, чи вся композиція вміщується в робоче поле
+function isCompositionWithinWorkspace(padding = 4) {
+  if (!workspace || elements.length === 0) return true;
+
+  return elements.every(item => {
+    const { halfWidth, halfHeight } = getShapeHalfBounds(item);
+
+    return (
+      item.x - halfWidth >= padding &&
+      item.x + halfWidth <= workspace.clientWidth - padding &&
+      item.y - halfHeight >= padding &&
+      item.y + halfHeight <= workspace.clientHeight - padding
+    );
+  });
+}
+// Адаптуємо композицію до розміру робочого поля
+// Початкові координати й розміри не змінюються
 function fitElementsIntoWorkspace() {
   if (!workspace || elements.length === 0) return;
 
@@ -890,86 +934,116 @@ function fitElementsIntoWorkspace() {
 
   const padding = 4;
 
-  const getCompositionBounds = () => {
-    const bounds = elements.map(item => {
-      const { halfWidth, halfHeight } = getShapeHalfBounds(item);
+  // Якщо базові параметри ще не задані, відновлюємо їх
+  // з поточного відображення
+  elements.forEach(item => {
+    if (!Number.isFinite(item.baseX)) {
+      item.baseX =
+        (item.x - workspaceLayoutOffsetX) / workspaceLayoutScale;
+    }
 
-      return {
-        left: item.x - halfWidth,
-        right: item.x + halfWidth,
-        top: item.y - halfHeight,
-        bottom: item.y + halfHeight
-      };
-    });
+    if (!Number.isFinite(item.baseY)) {
+      item.baseY =
+        (item.y - workspaceLayoutOffsetY) / workspaceLayoutScale;
+    }
+
+    if (!Number.isFinite(item.baseWidth)) {
+      item.baseWidth =
+        item.element.offsetWidth / workspaceLayoutScale;
+    }
+
+    if (!Number.isFinite(item.baseHeight)) {
+      item.baseHeight =
+        item.element.offsetHeight / workspaceLayoutScale;
+    }
+  });
+
+  // Визначаємо межі всієї композиції
+  const bounds = elements.map(item => {
+    const { halfWidth, halfHeight } =
+      getBaseShapeHalfBounds(item);
 
     return {
-      left: Math.min(...bounds.map(bound => bound.left)),
-      right: Math.max(...bounds.map(bound => bound.right)),
-      top: Math.min(...bounds.map(bound => bound.top)),
-      bottom: Math.max(...bounds.map(bound => bound.bottom))
+      left: item.baseX - halfWidth,
+      right: item.baseX + halfWidth,
+      top: item.baseY - halfHeight,
+      bottom: item.baseY + halfHeight
     };
+  });
+
+  const compositionBounds = {
+    left: Math.min(...bounds.map(bound => bound.left)),
+    right: Math.max(...bounds.map(bound => bound.right)),
+    top: Math.min(...bounds.map(bound => bound.top)),
+    bottom: Math.max(...bounds.map(bound => bound.bottom))
   };
 
-  let bounds = getCompositionBounds();
-  let compositionWidth = bounds.right - bounds.left;
-  let compositionHeight = bounds.bottom - bounds.top;
+  const compositionWidth =
+    compositionBounds.right - compositionBounds.left;
 
-  // Якщо композиція завелика, пропорційно зменшуємо всі фігури
-  // та відстані між ними, не змінюючи їхньої форми.
+  const compositionHeight =
+    compositionBounds.bottom - compositionBounds.top;
+
+  if (compositionWidth <= 0 || compositionHeight <= 0) return;
+
+  // Визначаємо єдиний пропорційний масштаб
   const scale = Math.min(
     1,
     (fieldWidth - padding * 2) / compositionWidth,
     (fieldHeight - padding * 2) / compositionHeight
   );
 
-  if (Number.isFinite(scale) && scale < 0.999) {
-    const centerX = (bounds.left + bounds.right) / 2;
-    const centerY = (bounds.top + bounds.bottom) / 2;
+  if (!Number.isFinite(scale) || scale <= 0) return;
 
-    elements.forEach(item => {
-      const newWidth = item.element.offsetWidth * scale;
-      const newHeight = item.element.offsetHeight * scale;
+  // Розміщуємо композицію в межах робочого поля
+  if (scale < 1) {
+    // Якщо композиція зменшується — центруємо її
+    workspaceLayoutOffsetX =
+      (fieldWidth - compositionWidth * scale) / 2 -
+      compositionBounds.left * scale;
 
-      item.element.style.width = `${newWidth}px`;
-      item.element.style.height = `${newHeight}px`;
-      item.x = centerX + (item.x - centerX) * scale;
-      item.y = centerY + (item.y - centerY) * scale;
+    workspaceLayoutOffsetY =
+      (fieldHeight - compositionHeight * scale) / 2 -
+      compositionBounds.top * scale;
+  } else {
+    // Якщо масштаб 1 — зміщуємо композицію
+    // лише тоді, коли вона виходить за межі поля
+    workspaceLayoutOffsetX =
+      compositionBounds.left < padding
+        ? padding - compositionBounds.left
+        : compositionBounds.right > fieldWidth - padding
+          ? fieldWidth - padding - compositionBounds.right
+          : 0;
 
-      item.element.style.left = `${item.x}px`;
-      item.element.style.top = `${item.y}px`;
-    });
+    workspaceLayoutOffsetY =
+      compositionBounds.top < padding
+        ? padding - compositionBounds.top
+        : compositionBounds.bottom > fieldHeight - padding
+          ? fieldHeight - padding - compositionBounds.bottom
+          : 0;
   }
 
-  // Після масштабування (або якщо воно не знадобилося)
-  // зсуваємо композицію всередину поля, якщо вона торкається краю.
-  bounds = getCompositionBounds();
+  workspaceLayoutScale = scale;
 
-  let shiftX = 0;
-  let shiftY = 0;
+  // Відображаємо всі фігури в новому масштабі
+  elements.forEach(item => {
+    item.x =
+      item.baseX * scale + workspaceLayoutOffsetX;
 
-  if (bounds.left < padding) {
-    shiftX = padding - bounds.left;
-  } else if (bounds.right > fieldWidth - padding) {
-    shiftX = fieldWidth - padding - bounds.right;
-  }
+    item.y =
+      item.baseY * scale + workspaceLayoutOffsetY;
 
-  if (bounds.top < padding) {
-    shiftY = padding - bounds.top;
-  } else if (bounds.bottom > fieldHeight - padding) {
-    shiftY = fieldHeight - padding - bounds.bottom;
-  }
+    item.element.style.width =
+      `${item.baseWidth * scale}px`;
 
-  if (shiftX !== 0 || shiftY !== 0) {
-    elements.forEach(item => {
-      item.x += shiftX;
-      item.y += shiftY;
-      item.element.style.left = `${item.x}px`;
-      item.element.style.top = `${item.y}px`;
-    });
-  }
+    item.element.style.height =
+      `${item.baseHeight * scale}px`;
+
+    item.element.style.left = `${item.x}px`;
+    item.element.style.top = `${item.y}px`;
+  });
 
   if (selectedElements.length > 0) {
-    // Групове виділення не потребує окремого контуру.
     return;
   }
 
@@ -998,6 +1072,51 @@ function clearSelection() {
   });
 }
 const constructorScreen = document.getElementById("constructorScreen");
+
+// Підказка про прокручування панелі інструментів
+const toolsPanel = document.querySelector("#constructorScreen .tools-panel");
+const toolsScrollHint = document.getElementById("toolsScrollHint");
+
+function updateToolsScrollHint() {
+  const isLandscapeMobile = window.matchMedia(
+    "(max-width: 900px) and (orientation: landscape)"
+  ).matches;
+
+  const isConstructorActive =
+    constructorScreen.classList.contains("active");
+
+  // Підказка працює лише в конструкторі на телефоні горизонтально
+  if (!isLandscapeMobile || !isConstructorActive) {
+    toolsScrollHint.hidden = true;
+    return;
+  }
+
+  const hasMoreContent =
+    toolsPanel.scrollHeight > toolsPanel.clientHeight + 2;
+
+  const isAtBottom =
+    toolsPanel.scrollTop + toolsPanel.clientHeight >=
+    toolsPanel.scrollHeight - 8;
+
+  toolsScrollHint.hidden = !hasMoreContent || isAtBottom;
+}
+
+// Реагуємо на прокручування
+toolsPanel.addEventListener("scroll", updateToolsScrollHint);
+
+// Реагуємо на появу або приховування налаштувань фігури
+const toolsPanelObserver = new MutationObserver(() => {
+  requestAnimationFrame(updateToolsScrollHint);
+});
+
+toolsPanelObserver.observe(toolsPanel, {
+  attributes: true,
+  subtree: true,
+  attributeFilter: ["hidden"]
+});
+
+// Перевіряємо стан підказки при зміні розміру вікна
+window.addEventListener("resize", updateToolsScrollHint);
 
 // Автовідтворення першого відео
 welcomeVideo.play().catch(() => {
@@ -1049,6 +1168,7 @@ constructorButton.addEventListener("click", () => {
   explanationScreen.classList.remove("active");
   constructorScreen.classList.add("active");
   playScreenTransitionSound();
+  requestAnimationFrame(updateToolsScrollHint);
 });
 
 // Перехід із конструктора на екран готового персонажа
@@ -1219,14 +1339,25 @@ sizeButtons.forEach(button => {
     selection.forEach(item => {
       const dimensions = sizes[item.shape][size];
 
-      item.element.style.width = `${dimensions[0]}px`;
-      item.element.style.height = `${dimensions[1]}px`;
+      // Зберігаємо нові початкові розміри
+      item.baseWidth = dimensions[0];
+      item.baseHeight = dimensions[1];
+
+      // Відображаємо розмір з урахуванням масштабу поля
+      item.element.style.width =
+        `${item.baseWidth * workspaceLayoutScale}px`;
+
+      item.element.style.height =
+        `${item.baseHeight * workspaceLayoutScale}px`;
 
       item.size = size;
     });
 
-    // Якщо збільшена фігура не вміщується, адаптуємо композицію до поля.
-    fitElementsIntoWorkspace();
+    // Адаптуємо всю композицію лише тоді,
+    // коли після зміни розміру вона перестала вміщуватися
+    if (!isCompositionWithinWorkspace()) {
+      fitElementsIntoWorkspace();
+    }
 
     // Оновлюємо підсвічування розміру
     updateSizeButtons(selection[0]);
@@ -1314,6 +1445,8 @@ rotationButtons.forEach(button => {
       item.x += shiftX;
       item.y += shiftY;
 
+      syncBasePosition(item);
+
       item.element.style.left = `${item.x}px`;
       item.element.style.top = `${item.y}px`;
       item.element.style.transform =
@@ -1359,6 +1492,8 @@ nudgeButtons.forEach(button => {
     selection.forEach(item => {
       item.x += dx;
       item.y += dy;
+
+      syncBasePosition(item);
 
       item.element.style.left = `${item.x}px`;
       item.element.style.top = `${item.y}px`;
@@ -1464,6 +1599,8 @@ selection.forEach(item => {
   item.x += deltaX;
   item.y += deltaY;
 
+  syncBasePosition(item);
+
   item.element.style.left = `${item.x}px`;
   item.element.style.top = `${item.y}px`;
 });
@@ -1514,8 +1651,21 @@ selection.forEach(item => {
   shape.style.top = `${y}px`;
 
   workspace.appendChild(shape);
+
+// Запам'ятовуємо початкові розміри фігури
+  const baseWidth = shape.offsetWidth;
+  const baseHeight = shape.offsetHeight;
+
+  // Одразу застосовуємо масштаб робочого поля
+  shape.style.width =
+    `${baseWidth * workspaceLayoutScale}px`;
+
+  shape.style.height =
+    `${baseHeight * workspaceLayoutScale}px`;
+
   const halfWidth = shape.offsetWidth / 2;
   const halfHeight = shape.offsetHeight / 2;
+  
   // Обмежуємо розміщення фігури межами робочого поля
   x = Math.max(halfWidth, Math.min(x, workspace.clientWidth - halfWidth));
   y = Math.max(halfHeight, Math.min(y, workspace.clientHeight - halfHeight));
@@ -1528,13 +1678,21 @@ selection.forEach(item => {
     id: Date.now(),
     shape: selectedShapeType,
     element: shape,
+
+    // Координати та розміри в початковому масштабі
+    baseX: (x - workspaceLayoutOffsetX) / workspaceLayoutScale,
+    baseY: (y - workspaceLayoutOffsetY) / workspaceLayoutScale,
+    baseWidth: baseWidth,
+    baseHeight: baseHeight,
+
+    // Координати поточного відображення
     x: x,
     y: y,
     rotation: 0
   };
 
   elements.push(elementData);
-
+  
   selectElement(elementData);
   selectedShapeType = null;
   
@@ -1551,11 +1709,15 @@ function saveState() {
     elements: elements.map(item => ({
       id: item.id,
       shape: item.shape,
-      x: item.x,
-      y: item.y,
+      x: item.baseX,
+      y: item.baseY,
+      baseX: item.baseX,
+      baseY: item.baseY,
+      baseWidth: item.baseWidth,
+      baseHeight: item.baseHeight,
       color: getComputedStyle(item.element).backgroundColor,
-      width: item.element.offsetWidth,
-      height: item.element.offsetHeight,
+      width: item.baseWidth,
+      height: item.baseHeight,
       size: item.size || "medium",
       rotation: item.rotation || 0
     })),
@@ -1603,8 +1765,8 @@ function restoreState(state) {
     shape.dataset.shape = item.shape;
     shape.style.left = `${item.x}px`;
     shape.style.top = `${item.y}px`;
-    shape.style.width = `${item.width}px`;
-    shape.style.height = `${item.height}px`;
+    shape.style.width = `${item.baseWidth ?? item.width}px`;
+    shape.style.height = `${item.baseHeight ?? item.height}px`;
     shape.style.transform = `translate(-50%, -50%) rotate(${item.rotation || 0}deg)`;
     shape.style.backgroundColor = item.color;
 
