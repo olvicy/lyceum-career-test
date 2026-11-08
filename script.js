@@ -1079,13 +1079,13 @@ const toolsScrollHint = document.getElementById("toolsScrollHint");
 
 function updateToolsScrollHint() {
   const isLandscapeMobile = window.matchMedia(
-    "(max-width: 900px) and (orientation: landscape)"
+    "(max-width: 900px)"
   ).matches;
 
   const isConstructorActive =
     constructorScreen.classList.contains("active");
 
-  // Підказка працює лише в конструкторі на телефоні горизонтально
+  // Підказка працює лише в конструкторі на мобільних екранах
   if (!isLandscapeMobile || !isConstructorActive) {
     toolsScrollHint.hidden = true;
     return;
