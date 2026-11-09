@@ -91,7 +91,7 @@ let currentPassageId = null;
 let passageStartedAt = null;
 
 // Адреса Google Apps Script
-const analyticsUrl = "https://script.google.com/macros/s/AKfycbyYBGkLA7IPaOoYXM0pklSGkflKIiWs5hyvNmCEV3lhJAJQBdWejWKfgQYVA-rBVzLR/exec";
+const analyticsUrl = "https://script.google.com/macros/s/AKfycbyYD-cazfJPm8F0QybPC0wdwXHoKThVw0zrn5MB_RsgmrsrK-ahPrKHW30wCTWDTw5h/exec";
 
 // Передавання аналітичної події
 function sendAnalyticsEvent(data) {
