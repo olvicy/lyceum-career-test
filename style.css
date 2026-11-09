@@ -2102,12 +2102,16 @@ cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width=
     padding: 25px 12px;
   }
 
-  /* Обидві кульки займають одну колонку */
-  #bubbleComparison .interest-bubble.bubble-left,
-  #bubbleComparison .interest-bubble.bubble-right {
-    grid-column: 1;
-    grid-row: auto;
-  }
+  /* Фіксуємо позиції кульок: верхня та нижня */
+#bubbleComparison .interest-bubble.bubble-left {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#bubbleComparison .interest-bubble.bubble-right {
+  grid-column: 1;
+  grid-row: 2;
+}
 
   /* Зручний розмір кульок для телефона */
   #bubbleComparison .interest-bubble {
@@ -2153,6 +2157,16 @@ cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width=
     height: auto;
     padding: 12px 6px;
     box-sizing: border-box;
+  }
+    /* Фіксуємо позиції кульок: ліва та права */
+  #secondTestScreen #bubbleComparison .interest-bubble.bubble-left {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  #secondTestScreen #bubbleComparison .interest-bubble.bubble-right {
+    grid-column: 2;
+    grid-row: 1;
   }
 
   /* Компактні кульки */
